@@ -1,0 +1,69 @@
+<Window x:Class="CarouselOverlay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Carousel Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        Width="400" Height="220"
+        ResizeMode="NoResize">
+
+    <Grid x:Name="MainGrid">
+        <!-- 卡片容器 -->
+        <Border x:Name="CardBorder"
+                Background="#E0FFFFFF"
+                CornerRadius="16"
+                Padding="24,20"
+                Margin="10"
+                Cursor="Hand">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="4" BlurRadius="20" Opacity="0.3"/>
+            </Border.Effect>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="WordText"
+                           Text="Hello"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#333333"
+                           HorizontalAlignment="Center"
+                           FontFamily="Segoe UI, Microsoft YaHei UI"/>
+                <TextBlock x:Name="PhoneticText"
+                           Text="/həˈloʊ/"
+                           FontSize="14"
+                           Foreground="#666666"
+                           HorizontalAlignment="Center"
+                           Margin="0,4,0,0"
+                           FontFamily="Segoe UI"/>
+                <TextBlock x:Name="TransText"
+                           Text="你好"
+                           FontSize="18"
+                           Foreground="#5B6CFF"
+                           HorizontalAlignment="Center"
+                           Margin="0,8,0,0"
+                           FontFamily="Microsoft YaHei UI"/>
+                <!-- 例句显示 -->
+                <TextBlock x:Name="ExampleText"
+                           Text=""
+                           FontSize="13"
+                           Foreground="#555555"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="0,10,0,0"
+                           MaxWidth="340"
+                           Visibility="Collapsed"
+                           FontFamily="Segoe UI, Microsoft YaHei UI"
+                           FontStyle="Italic"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 进度指示器 -->
+        <StackPanel x:Name="DotsPanel"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,15"/>
+    </Grid>
+</Window>

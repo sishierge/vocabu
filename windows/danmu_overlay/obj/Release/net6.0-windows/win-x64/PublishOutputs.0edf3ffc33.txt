@@ -1,0 +1,6 @@
+D:\nixiang_app\vocabu\windows\danmu_overlay\bin\Release\net6.0-windows\publish\DanmuOverlay.exe
+D:\nixiang_app\vocabu\windows\danmu_overlay\bin\Release\net6.0-windows\publish\DanmuOverlay.dll
+D:\nixiang_app\vocabu\windows\danmu_overlay\bin\Release\net6.0-windows\publish\DanmuOverlay.deps.json
+D:\nixiang_app\vocabu\windows\danmu_overlay\bin\Release\net6.0-windows\publish\DanmuOverlay.runtimeconfig.json
+D:\nixiang_app\vocabu\windows\danmu_overlay\bin\Release\net6.0-windows\publish\DanmuOverlay.pdb
+D:\nixiang_app\vocabu\windows\danmu_overlay\bin\Release\net6.0-windows\publish\Newtonsoft.Json.dll

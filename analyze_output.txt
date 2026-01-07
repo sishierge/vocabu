@@ -1,0 +1,51 @@
+﻿Analyzing lib...                                                
+
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\english_books_page.dart:426:9 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\english_books_page.dart:427:9 - prefer_const_declarations
+   info - Use 'const' with the constructor to improve performance - lib\pages\english_books_page.dart:1341:13 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\pages\english_books_page.dart:1343:22 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\pages\english_books_page.dart:1369:15 - prefer_const_constructors
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions\danmu_plugin_page.dart:228:31 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions\danmu_plugin_page.dart:229:33 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions\danmu_plugin_page.dart:230:27 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions\danmu_plugin_page.dart:238:22 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions\danmu_plugin_page.dart:735:40 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions\danmu_plugin_page.dart:735:55 - deprecated_member_use
+   info - The private field _searchHistory could be 'final' - lib\pages\extensions\query_word_dialog.dart:32:16 - prefer_final_fields
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions_page.dart:496:27 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions_page.dart:497:31 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions_page.dart:498:33 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\pages\extensions_page.dart:545:30 - use_build_context_synchronously
+   info - Use 'const' for final variables initialized to a constant value - lib\pages\extensions_page.dart:567:11 - prefer_const_declarations
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions_page.dart:1030:40 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g - lib\pages\extensions_page.dart:1030:55 - deprecated_member_use
+   info - The import of 'package:flutter/foundation.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\pages\learning\flashcard_page.dart:2:8 - unnecessary_import
+   info - Use 'const' with the constructor to improve performance - lib\pages\learning\listening_page.dart:1047:15 - prefer_const_constructors
+   info - The import of 'package:flutter/foundation.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\pages\learning\quiz_page.dart:2:8 - unnecessary_import
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\pages\settings_page.dart:141:42 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\pages\settings_page.dart:278:31 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\pages\settings_page.dart:585:31 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\pages\settings_page.dart:611:31 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\pages\store_page.dart:331:30 - use_build_context_synchronously
+   info - Use 'const' for final variables initialized to a constant value - lib\services\settings_service.dart:145:7 - prefer_const_declarations
+   info - The 'if' statement could be replaced by a null-aware assignment - lib\services\translation_service.dart:57:5 - prefer_conditional_assignment
+
+flutter : 29 issues 
+found. (ran in 1.3s)
+所在位置 行:1 字符: 1
++ flutter analyze lib 
+--no-pub 2>&1 | 
+Out-File -FilePath 
+analyze_output ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (29 issues    
+ found. (ran in 1.    
+3s):String) [], R    
+emoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 

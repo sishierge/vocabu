@@ -1,0 +1,64 @@
+<Window x:Class="DanmuOverlay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Danmu Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        WindowState="Maximized"
+        ResizeMode="NoResize">
+
+    <Grid x:Name="MainGrid">
+        <!-- 弹幕区域 -->
+        <Canvas x:Name="DanmuCanvas"
+                Background="Transparent"
+                ClipToBounds="True"/>
+
+        <!-- 例句显示区域 -->
+        <Border x:Name="ExamplePanel"
+                Visibility="Collapsed"
+                Background="#E0000000"
+                CornerRadius="12"
+                Padding="20,16"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Margin="0,0,0,80"
+                MaxWidth="800"
+                MouseLeftButtonDown="ExamplePanel_MouseLeftButtonDown">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="4" BlurRadius="20" Opacity="0.4"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock x:Name="ExampleEnglish"
+                           Foreground="White"
+                           FontSize="18"
+                           TextWrapping="Wrap"
+                           FontFamily="Segoe UI, Microsoft YaHei UI"/>
+                <TextBlock x:Name="ExampleChinese"
+                           Foreground="#FFD700"
+                           FontSize="15"
+                           TextWrapping="Wrap"
+                           Margin="0,8,0,0"
+                           FontFamily="Microsoft YaHei UI"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 已掌握提示 -->
+        <Border x:Name="MasteredToast"
+                Visibility="Collapsed"
+                Background="#4CAF50"
+                CornerRadius="8"
+                Padding="16,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,100,0,0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="✓" Foreground="White" FontSize="16" Margin="0,0,8,0"/>
+                <TextBlock x:Name="MasteredWord" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                <TextBlock Text=" 已标记为掌握" Foreground="White" FontSize="14"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

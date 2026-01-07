@@ -1,0 +1,72 @@
+name: vocabu
+description: Vocabu - 智能英语学习助手
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Data Persistence
+  sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.0
+  path: ^1.8.3
+  shared_preferences: ^2.2.0
+  
+  # State Management
+  provider: ^6.0.5
+  
+  # UI Components
+  flutter_svg: ^2.0.7
+  fl_chart: ^0.63.0
+  cupertino_icons: ^1.0.2
+  
+  # Logic & Utils
+  intl: ^0.18.1
+  uuid: ^4.0.0
+
+  path_provider: ^2.1.5
+  flutter_barrage_craft: ^1.0.1
+  url_launcher: ^6.2.0
+  google_fonts: ^6.1.0
+  
+  # Desktop Overlay
+  desktop_multi_window: ^0.2.0
+  window_manager: ^0.4.3
+  screen_retriever: ^0.2.0
+
+  # TTS
+  flutter_tts: ^4.0.2
+
+  # Audio Player (for real BBC/VOA audio)
+  audioplayers: ^6.0.0
+
+  # Speech Recognition (for pronunciation scoring)
+  speech_to_text: ^7.0.0
+
+  # HTTP
+  http: ^1.1.0
+
+  # File Selector
+  file_selector: ^1.0.3
+
+  # Hotkey
+  hotkey_manager: ^0.2.3
+
+  # System Tray
+  tray_manager: ^0.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+    - assets/wordmomo.db

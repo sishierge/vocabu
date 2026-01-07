@@ -1,0 +1,80 @@
+<svg viewBox="0 0 1024 1024" height="1024" width="1024" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .cls-1, .cls-8 {
+        fill: #fff;
+      }
+
+      .cls-1 {
+        opacity: 0;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-5 {
+        fill: url(#linear-gradient-4);
+      }
+
+      .cls-6 {
+        fill: url(#linear-gradient-5);
+      }
+
+      .cls-7 {
+        fill: #f5f8fe;
+      }
+
+      .cls-9 {
+        fill: #e1e6ed;
+      }
+
+      .cls-10 {
+        fill: url(#linear-gradient-6);
+      }
+    </style>
+    <linearGradient gradientUnits="objectBoundingBox" y2="0.766" x2="0.506" x1="0.5" id="linear-gradient">
+      <stop stop-opacity="0.71" stop-color="#f8f8f8" offset="0"></stop>
+      <stop stop-opacity="0" stop-color="#e2e7f2" offset="1"></stop>
+    </linearGradient>
+    <linearGradient gradientUnits="objectBoundingBox" y2="0.522" x2="0.5" x1="0.5" id="linear-gradient-2">
+      <stop stop-color="#f8f8f8" offset="0"></stop>
+      <stop stop-opacity="0" stop-color="#f8f8f8" offset="1"></stop>
+    </linearGradient>
+    <linearGradient gradientUnits="objectBoundingBox" y2="1.006" x2="0.338" y1="-0.019" x1="0.765" id="linear-gradient-3">
+      <stop stop-color="#f8f8f8" offset="0"></stop>
+      <stop stop-opacity="0" stop-color="#e2e7f2" offset="1"></stop>
+    </linearGradient>
+    <linearGradient xlink:href="#linear-gradient-3" y2="0.815" x2="0.65" y1="-0.019" x1="0.765" id="linear-gradient-4"></linearGradient>
+    <linearGradient gradientUnits="objectBoundingBox" y2="1" x2="0.5" x1="0.5" id="linear-gradient-5">
+      <stop stop-color="#eaeef2" offset="0"></stop>
+      <stop stop-color="#e1e6ed" offset="1"></stop>
+    </linearGradient>
+    <linearGradient xlink:href="#linear-gradient-3" y2="1" x2="0.5" y1="0" x1="0.5" id="linear-gradient-6"></linearGradient>
+  </defs>
+  <g transform="translate(-1320 -196)" id="暂无订单">
+    <rect transform="translate(1320 196)" height="1024" width="1024" class="cls-1" id="矩形_336"></rect>
+    <g id="组_160">
+      <path transform="translate(1342 673.439) rotate(-7)" d="M4.09,304.412S-13.275,140.576,23.554,117.427,86.768,157.82,86.768,157.82,62.125,8.193,113.685.3s67.669,141.745,67.669,141.745-1.313-95.51,47.22-98.7,78.638,184.424,78.638,184.424Z" class="cls-2" id="路径_63"></path>
+      <ellipse transform="translate(1356.382 870)" ry="135" rx="482.809" cy="135" cx="482.809" class="cls-3" id="椭圆_16"></ellipse>
+      <path transform="translate(2119.785 802) rotate(7)" d="M13.651,69.778c28.8-20.168,9.3-36.928,24.476-44.085S63.246,13.6,64.392,0c6.011,17.749,19.18,26.623,9.947,49.883s6.334,45.7-10.734,63.838-53.031,13.956-53.031,13.956S-15.152,89.946,13.651,69.778Z" class="cls-4" id="路径_61"></path>
+      <path transform="matrix(0.839, 0.545, -0.545, 0.839, 2216.998, 846)" d="M9.342,47.753c19.712-13.8,6.367-25.272,16.751-30.17S43.284,9.306,44.068,0c4.114,12.146,13.126,18.22,6.808,34.138s4.335,31.273-7.347,43.689S7.236,87.377,7.236,87.377-10.369,61.556,9.342,47.753Z" class="cls-5" id="路径_62"></path>
+      <path transform="translate(1675.318 500.658)" d="M287.557,405.018H44.548A51.505,51.505,0,0,1-7,353.47V51.548A51.506,51.506,0,0,1,44.548,0H93.837a34.98,34.98,0,0,0,.417,69.958h1.227A34.979,34.979,0,0,0,95.9,0L237.433,0a34.98,34.98,0,0,0,.417,69.958h1.227A34.979,34.979,0,0,0,239.5,0l48.062,0a51.506,51.506,0,0,1,51.548,51.548V353.47a51.505,51.505,0,0,1-51.548,51.548Z" class="cls-6" id="路径_8758"></path>
+      <rect transform="translate(1739.272 459.515)" rx="30.683" height="104.323" width="61.366" class="cls-7" id="矩形_302"></rect>
+      <rect transform="translate(1882.071 459.515)" rx="30.683" height="104.323" width="61.366" class="cls-7" id="矩形_309"></rect>
+      <rect transform="translate(1731.934 652.846)" rx="20" height="40" width="218.875" class="cls-8" id="矩形_316"></rect>
+      <rect transform="translate(1731.934 733.488)" rx="20" height="40" width="130" class="cls-8" id="矩形_317"></rect>
+      <path transform="translate(2104 714.653) rotate(-48)" d="M125.25,49.473a94.393,94.393,0,0,1-10.961-.658A146.413,146.413,0,0,1,92.5,44.643a107.908,107.908,0,0,1-17.358-6.337,73.958,73.958,0,0,1-11.812-6.885q-.466.184-.945.351c-5.361,1.876-11.963,2.221-19.627,1.02a98.056,98.056,0,0,1-19.792-5.564A154.556,154.556,0,0,1,1.214,16.807a2.5,2.5,0,0,1,2.572-4.288h0A152.5,152.5,0,0,0,24.832,22.59c13.969,5.374,25.606,7.1,33.86,5.067a36.041,36.041,0,0,1-4.814-5.318c-3.089-4.25-4.336-8.427-3.606-12.079C51.119,6.029,54.514,2.53,59.353.9A16.7,16.7,0,0,1,66.7.119a12.559,12.559,0,0,1,6.833,2.944,11.208,11.208,0,0,1,3.428,5.672,17.842,17.842,0,0,1,.011,8.086,2.544,2.544,0,0,1-.107.375,24.006,24.006,0,0,1-8.589,11.57,72.387,72.387,0,0,0,8.994,5.019c10.435,4.928,23.436,8.408,37.6,10.064,21.432,2.5,35.288-3.085,43.136-8.219,8.368-5.473,11.747-11.439,11.78-11.5a2.5,2.5,0,0,1,4.37,2.43c-.16.288-4.023,7.112-13.413,13.254a57.724,57.724,0,0,1-18.514,7.792A74.4,74.4,0,0,1,125.25,49.473ZM64.787,4.992a12.077,12.077,0,0,0-3.837.645c-3.124,1.052-5.282,3.147-5.773,5.6-.443,2.214.533,5.112,2.747,8.159a34.011,34.011,0,0,0,6.032,6.2,18.475,18.475,0,0,0,8.16-9.966c.549-2.832.638-6.591-1.887-8.821A8.184,8.184,0,0,0,64.787,4.992Z" class="cls-9" id="路径_77"></path>
+      <path transform="translate(2014.424 316.874)" d="M39.53,115.775a40,40,0,0,1,0-79.99A39.029,39.029,0,0,1,54.2,38.632q-.109-1.408-.11-2.846a35.372,35.372,0,1,1,70.738,0,36.045,36.045,0,0,1-2.614,13.526,34.9,34.9,0,0,1,18.218-5.106,35.787,35.787,0,0,1,0,71.57Z" class="cls-10" id="联合_67"></path>
+      <path transform="translate(1473.769 393.148)" d="M26.757,79C11.98,79,0,66.782,0,51.709S11.98,24.418,26.757,24.418a26.233,26.233,0,0,1,9.933,1.942q-.074-.961-.075-1.942a23.945,23.945,0,1,1,47.881,0,24.77,24.77,0,0,1-1.769,9.23,23.482,23.482,0,0,1,12.332-3.484,24.423,24.423,0,0,1,0,48.836Z" class="cls-10" id="联合_68"></path>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<svg width="150.000000" height="161.000000" viewBox="0 0 150 161" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<path id="Ellipse 652" d="M150 75C150 116.421 116.421 150 75 150C33.5786 150 0 116.421 0 75C0 33.5786 33.5786 0 75 0C116.421 0 150 33.5786 150 75Z" fill-rule="evenodd" fill="#EAEFF7"/>
+	<g filter="url(#filter_36_18_dd)">
+		<path id="Rectangle 5615" d="M32 43L118 43C120.761 43 123 45.2386 123 48L123 153C123 155.761 120.761 158 118 158L32 158C29.2385 158 27 155.761 27 153L27 48C27 45.2386 29.2385 43 32 43Z" fill-rule="evenodd" fill="#FFFFFF"/>
+	</g>
+	<path id="Rectangle 5617" d="M39 58L65 58C66.6569 58 68 59.3431 68 61C68 62.6569 66.6569 64 65 64L39 64C37.3431 64 36 62.6569 36 61C36 59.3431 37.3431 58 39 58Z" fill-rule="evenodd" fill="#B4DAFF"/>
+	<path id="Rectangle 5618" d="M39 71L83 71C84.6569 71 86 72.3431 86 74C86 75.6569 84.6569 77 83 77L39 77C37.3431 77 36 75.6569 36 74C36 72.3431 37.3431 71 39 71Z" fill-rule="evenodd" fill="#DFEAFB"/>
+	<path id="Rectangle 5617" d="M39 85L65 85C66.6569 85 68 86.3431 68 88C68 89.6569 66.6569 91 65 91L39 91C37.3431 91 36 89.6569 36 88C36 86.3431 37.3431 85 39 85Z" fill-rule="evenodd" fill="#B4DAFF"/>
+	<path id="Rectangle 5618" d="M39 98L83 98C84.6569 98 86 99.3431 86 101C86 102.657 84.6569 104 83 104L39 104C37.3431 104 36 102.657 36 101C36 99.3431 37.3431 98 39 98Z" fill-rule="evenodd" fill="#DFEAFB"/>
+	<path id="Rectangle 5617" d="M39 112L65 112C66.6569 112 68 113.343 68 115C68 116.657 66.6569 118 65 118L39 118C37.3431 118 36 116.657 36 115C36 113.343 37.3431 112 39 112Z" fill-rule="evenodd" fill="#B4DAFF"/>
+	<path id="Rectangle 5618" d="M39 125L83 125C84.6569 125 86 126.343 86 128C86 129.657 84.6569 131 83 131L39 131C37.3431 131 36 129.657 36 128C36 126.343 37.3431 125 39 125Z" fill-rule="evenodd" fill="#DFEAFB"/>
+	<defs>
+		<filter id="filter_36_18_dd" x="21.000000" y="34.000000" width="108.000000" height="127.000000" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+			<feOffset dx="0" dy="-3"/>
+			<feGaussianBlur stdDeviation="2"/>
+			<feColorMatrix type="matrix" values="0 0 0 0 0.78824 0 0 0 0 0.80392 0 0 0 0 0.85098 0 0 0 0.35 0"/>
+			<feBlend mode="normal" in2="BackgroundImageFix" result="effect_dropShadow_1"/>
+			<feBlend mode="normal" in="SourceGraphic" in2="effect_dropShadow_1" result="shape"/>
+		</filter>
+	</defs>
+</svg>

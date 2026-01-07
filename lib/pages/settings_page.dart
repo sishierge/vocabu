@@ -1,0 +1,1180 @@
+﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../providers/theme_provider.dart';
+import '../services/settings_service.dart';
+import '../services/review_reminder_service.dart';
+import '../services/learning_stats_service.dart';
+import 'backup_restore_page.dart';
+import 'learning_report_page.dart';
+
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  int _selectedTab = 0;
+
+  final List<String> _tabs = ['基本设置', '学习设置', 'WebDAV', '记忆算法', '快捷链接'];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            children: [
+              Icon(Icons.settings_outlined, size: 20, color: colorScheme.onSurface),
+              const SizedBox(width: 8),
+              Text('软件设置', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: colorScheme.onSurface)),
+            ],
+          ),
+          const SizedBox(height: 24),
+          // Tabs
+          Row(
+            children: _tabs.asMap().entries.map((entry) {
+              final isSelected = _selectedTab == entry.key;
+              return Padding(
+                padding: const EdgeInsets.only(right: 24),
+                child: InkWell(
+                  onTap: () => setState(() => _selectedTab = entry.key),
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: isSelected ? colorScheme.primary : Colors.transparent,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      entry.value,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                        color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 24),
+          // Tab content
+          Expanded(child: _buildTabContent()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabContent() {
+    switch (_selectedTab) {
+      case 0:
+        return _buildBasicSettings();
+      case 1:
+        return _buildLearningSettings();
+      case 2:
+        return _buildWebDAVSettings();
+      case 3:
+        return _buildAlgorithmSettings();
+      case 4:
+        return _buildQuickLinks();
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget _buildBasicSettings() {
+    final settings = SettingsService.instance;
+    
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, _) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SettingRow(
+              label: '软件主题',
+              child: Row(
+                children: [
+                  _ToggleButton('浅色', !themeProvider.isDarkMode, () {
+                    themeProvider.setThemeMode(ThemeMode.light);
+                  }),
+                  const SizedBox(width: 8),
+                  _ToggleButton('深色', themeProvider.isDarkMode, () {
+                    themeProvider.setThemeMode(ThemeMode.dark);
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            _SettingRow(
+              label: '子进程运行方式',
+              child: Row(
+                children: [
+                  _ToggleButton('默认', settings.processMode == 0, () async {
+                    await settings.setProcessMode(0);
+                    setState(() {});
+                  }),
+                  const SizedBox(width: 8),
+                  _ToggleButton('Explorer', settings.processMode == 1, () async {
+                    await settings.setProcessMode(1);
+                    setState(() {});
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            _SettingRow(
+              label: '开机自启',
+              child: Switch(
+                value: settings.autoStart,
+                onChanged: (v) async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  await settings.setAutoStart(v);
+                  setState(() {});
+                  if (mounted) {
+                    messenger.showSnackBar(
+                      SnackBar(content: Text(v ? '✅ 开机自启已启用' : '❌ 开机自启已禁用')),
+                    );
+                  }
+                },
+                activeColor: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 24),
+            // 数据备份恢复
+            _buildBackupSection(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildBackupSection() {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '数据管理',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 12),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const BackupRestorePage()),
+            );
+          },
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.backup_outlined, color: Colors.blue),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '数据备份与恢复',
+                        style: TextStyle(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '导出或恢复你的学习进度',
+                        style: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // 学习报告
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const LearningReportPage()),
+            );
+          },
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.purple.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.bar_chart_outlined, color: Colors.purple),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '学习报告',
+                        style: TextStyle(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '查看周报/月报统计',
+                        style: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLearningSettings() {
+    final reminder = ReviewReminderService.instance;
+    final stats = LearningStatsService.instance;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 每日目标设置
+          Text(
+            '每日目标',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _SettingRow(
+            label: '每日新词目标',
+            child: Row(
+              children: [
+                Slider(
+                  value: stats.dailyGoalNew.toDouble(),
+                  min: 5,
+                  max: 100,
+                  divisions: 19,
+                  label: '${stats.dailyGoalNew}',
+                  onChanged: (v) async {
+                    await stats.setDailyGoalNew(v.toInt());
+                    setState(() {});
+                  },
+                ),
+                SizedBox(
+                  width: 50,
+                  child: Text(
+                    '${stats.dailyGoalNew} 个',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          _SettingRow(
+            label: '每日复习目标',
+            child: Row(
+              children: [
+                Slider(
+                  value: stats.dailyGoalReview.toDouble(),
+                  min: 10,
+                  max: 200,
+                  divisions: 19,
+                  label: '${stats.dailyGoalReview}',
+                  onChanged: (v) async {
+                    await stats.setDailyGoalReview(v.toInt());
+                    setState(() {});
+                  },
+                ),
+                SizedBox(
+                  width: 50,
+                  child: Text(
+                    '${stats.dailyGoalReview} 个',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 32),
+
+          // 复习提醒设置
+          Text(
+            '复习提醒',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _SettingRow(
+            label: '启用复习提醒',
+            child: Switch(
+              value: reminder.reminderEnabled,
+              onChanged: (v) async {
+                await reminder.setReminderEnabled(v);
+                setState(() {});
+              },
+              activeColor: colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          _SettingRow(
+            label: '提醒间隔',
+            child: DropdownButton<int>(
+              value: reminder.reminderIntervalMinutes,
+              items: const [
+                DropdownMenuItem(value: 15, child: Text('15 分钟')),
+                DropdownMenuItem(value: 30, child: Text('30 分钟')),
+                DropdownMenuItem(value: 60, child: Text('1 小时')),
+                DropdownMenuItem(value: 120, child: Text('2 小时')),
+              ],
+              onChanged: reminder.reminderEnabled
+                  ? (v) async {
+                      if (v != null) {
+                        await reminder.setReminderIntervalMinutes(v);
+                        setState(() {});
+                      }
+                    }
+                  : null,
+              underline: const SizedBox(),
+            ),
+          ),
+          const SizedBox(height: 8),
+          _SettingRow(
+            label: '免打扰模式',
+            child: Switch(
+              value: reminder.quietHoursEnabled,
+              onChanged: reminder.reminderEnabled
+                  ? (v) async {
+                      await reminder.setQuietHoursEnabled(v);
+                      setState(() {});
+                    }
+                  : null,
+              activeColor: colorScheme.primary,
+            ),
+          ),
+          if (reminder.quietHoursEnabled) ...[
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                children: [
+                  Text(
+                    '${reminder.quietHoursStart} - ${reminder.quietHoursEnd}',
+                    style: TextStyle(
+                      color: colorScheme.onSurfaceVariant,
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  TextButton(
+                    onPressed: () => _editQuietHours(),
+                    child: const Text('修改'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 24),
+
+          // 当前状�?
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.notifications_outlined,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        reminder.reminderEnabled ? '已启用' : '已禁用',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        reminder.reminderMessage,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await reminder.checkNow();
+                    setState(() {});
+                  },
+                  child: const Text('刷新'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _editQuietHours() async {
+    final reminder = ReviewReminderService.instance;
+    
+    // Parse with error handling
+    TimeOfDay startTime = const TimeOfDay(hour: 22, minute: 0);
+    TimeOfDay endTime = const TimeOfDay(hour: 7, minute: 0);
+    try {
+      final startParts = reminder.quietHoursStart.split(':');
+      final endParts = reminder.quietHoursEnd.split(':');
+      if (startParts.length == 2) {
+        startTime = TimeOfDay(
+          hour: int.parse(startParts[0]),
+          minute: int.parse(startParts[1]),
+        );
+      }
+      if (endParts.length == 2) {
+        endTime = TimeOfDay(
+          hour: int.parse(endParts[0]),
+          minute: int.parse(endParts[1]),
+        );
+      }
+    } catch (_) {}
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('设置免打扰时间'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('开始时间'),
+                trailing: Text(
+                  '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () async {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime: startTime,
+                  );
+                  if (time != null) {
+                    setDialogState(() => startTime = time);
+                  }
+                },
+              ),
+              ListTile(
+                title: const Text('结束时间'),
+                trailing: Text(
+                  '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () async {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime: endTime,
+                  );
+                  if (time != null) {
+                    setDialogState(() => endTime = time);
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('取消'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('确定'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (result == true) {
+      final startStr =
+          '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
+      final endStr =
+          '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}';
+      await reminder.setQuietHoursStart(startStr);
+      await reminder.setQuietHoursEnd(endStr);
+      setState(() {});
+    }
+  }
+
+  Widget _buildWebDAVSettings() {
+    final settings = SettingsService.instance;
+    final hasConfig = settings.hasWebDavConfig;
+    final config = settings.webDavConfig;
+    
+    return Center(
+      child: hasConfig
+          ? _buildWebDavConfigured(config)
+          : _buildWebDavEmpty(),
+    );
+  }
+
+  Widget _buildWebDavEmpty() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.cloud_outlined, size: 80, color: Colors.blue[100]),
+        const SizedBox(height: 16),
+        Text('未配置WebDAV账号', style: TextStyle(color: Colors.grey[600])),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () => _showWebDavDialog(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+          ),
+          child: const Text('添加WebDAV账号'),
+        ),
+        const SizedBox(height: 8),
+        TextButton(
+          onPressed: () => _showWebDavHelp(),
+          child: Text('什么是WebDAV?', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWebDavConfigured(Map<String, String> config) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.cloud_done, size: 80, color: Colors.green[400]),
+        const SizedBox(height: 16),
+        Text('已配置WebDAV', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green[600])),
+        const SizedBox(height: 8),
+        Text(config['url'] ?? '', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+        Text('用户: ${config['user']}', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+        const SizedBox(height: 24),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () => _showWebDavDialog(isEdit: true),
+              icon: const Icon(Icons.edit, size: 18),
+              label: const Text('修改配置'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 12),
+            OutlinedButton.icon(
+              onPressed: () async {
+                await SettingsService.instance.clearWebDavConfig();
+                setState(() {});
+              },
+              icon: const Icon(Icons.delete, size: 18),
+              label: const Text('删除配置'),
+              style: OutlinedButton.styleFrom(foregroundColor: Colors.red),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _showWebDavDialog({bool isEdit = false}) {
+    final config = SettingsService.instance.webDavConfig;
+    final urlController = TextEditingController(text: isEdit ? config['url'] : '');
+    final userController = TextEditingController(text: isEdit ? config['user'] : '');
+    final passController = TextEditingController(text: isEdit ? config['pass'] : '');
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isEdit ? '修改WebDAV配置' : '添加WebDAV账号'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: urlController,
+              decoration: const InputDecoration(
+                labelText: '服务器地址',
+                hintText: 'https://example.com/dav/',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: userController,
+              decoration: const InputDecoration(labelText: '用户名'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: passController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: '密码'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('取消'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final navigator = Navigator.of(ctx);
+              await SettingsService.instance.setWebDavConfig(
+                urlController.text,
+                userController.text,
+                passController.text,
+              );
+              if (mounted) {
+                navigator.pop();
+                setState(() {});
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('WebDAV 配置已保存')),
+                );
+              }
+            },
+            child: const Text('保存'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showWebDavHelp() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('什么是WebDAV?'),
+        content: const Text(
+          'WebDAV是一种基于HTTP的协议，可用于在不同设备间同步学习数据。\n\n'
+          '支持的服务商：\n'
+          '�?坚果云\n'
+          '�?Nextcloud\n'
+          '�?群晖NAS\n'
+          '�?其他支持WebDAV的云存储',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('关闭'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAlgorithmSettings() {
+    final settings = SettingsService.instance;
+    final currentAlgorithm = settings.algorithm;
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _AlgorithmCard(
+            name: 'FSRS',
+            description: 'Free Spaced Repetition Scheduler，新一代记忆算法',
+            details: '智能动态间隔，根据记忆强度自动调整',
+            isSelected: currentAlgorithm == 'fsrs',
+            onSelect: () async {
+              await settings.setAlgorithm('fsrs');
+              setState(() {});
+            },
+            onConfigure: () => _showFsrsConfig(),
+          ),
+          const SizedBox(height: 16),
+          _AlgorithmCard(
+            name: 'SM-2',
+            description: 'SuperMemo 2，经典的间隔重复算法',
+            details: '间隔公式: I(n) = I(n-1) × EF  |  EF 范围: 1.3-2.5',
+            isSelected: currentAlgorithm == 'sm2',
+            onSelect: () async {
+              await settings.setAlgorithm('sm2');
+              setState(() {});
+            },
+            onConfigure: () => _showSm2Config(),
+          ),
+          const SizedBox(height: 16),
+          _AlgorithmCard(
+            name: 'Leitner',
+            description: '莱特纳盒子系统，简单直观的5盒子复习法',
+            details: '答对升级、答错回到第1层，盒子间隔: 1/2/4/7/14天',
+            isSelected: currentAlgorithm == 'leitner',
+            onSelect: () async {
+              await settings.setAlgorithm('leitner');
+              setState(() {});
+            },
+            onConfigure: () => _showLeitnerConfig(),
+          ),
+          const SizedBox(height: 16),
+          _AlgorithmCard(
+            name: 'StepMaster',
+            description: '阶梯间隔复习算法，固定阶梯步骤',
+            details: '间隔: 5分钟 > 2小时 > 1天 > 2天 > 4天 > 7天 > 15天',
+            isSelected: currentAlgorithm == 'stepmaster',
+            onSelect: () async {
+              await settings.setAlgorithm('stepmaster');
+              setState(() {});
+            },
+            onConfigure: () => _showStepMasterConfig(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFsrsConfig() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('FSRS 参数配置'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('FSRS 基于记忆强度动态调整复习间隔：', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 16),
+            Text('• 初次学习间隔较短'),
+            Text('• 随着记忆巩固，间隔逐渐增加'),
+            Text('• 遗忘时会自动缩短间隔'),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭')),
+        ],
+      ),
+    );
+  }
+
+  void _showStepMasterConfig() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('StepMaster 参数配置'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('阶梯复习间隔（固定）:', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8),
+            Text('• 阶段1: 5分钟'),
+            Text('• 阶段2: 2小时'),
+            Text('• 阶段3: 1天'),
+            Text('• 阶段4: 2天'),
+            Text('• 阶段5: 4天'),
+            Text('• 阶段6: 7天'),
+            Text('• 阶段7: 15天（掌握）'),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭')),
+        ],
+      ),
+    );
+  }
+
+  void _showSm2Config() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('SM-2 算法说明'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('SM-2 算法说明：', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 12),
+            Text('核心公式:', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 4),
+            Text('EF\' = EF + (0.1 - (5-q)*(0.08 + (5-q)*0.02))', style: TextStyle(fontSize: 12, fontFamily: 'monospace')),
+            SizedBox(height: 8),
+            Text('• EF (难度因子): 初始为2.5，范围1.3-2.5'),
+            Text('• q (评分): 0-5，低于3重置复习进度'),
+            Text('• I(n) = I(n-1) × EF'),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭')),
+        ],
+      ),
+    );
+  }
+
+  void _showLeitnerConfig() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Leitner 盒子系统'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('莱特纳系统使用5个盒子管理单词：', style: TextStyle(fontSize: 13)),
+            SizedBox(height: 12),
+            Text('📦 盒子1: 每天复习 (新词/遗忘)'),
+            Text('📦 盒子2: 2天复习'),
+            Text('📦 盒子3: 4天复习'),
+            Text('📦 盒子4: 7天复习'),
+            Text('📦 盒子5: 14天复习 (已掌握)'),
+            SizedBox(height: 12),
+            Text('规则:', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('• 答对: 升级到下一个盒子'),
+            Text('• 答错: 回到盒子1'),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('关闭')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickLinks() {
+    final links = SettingsService.instance.quickLinks;
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: links.length,
+            itemBuilder: (context, index) {
+              final link = links[index];
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(link['name']!, style: const TextStyle(fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 4),
+                          Text(link['url']!, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.open_in_new, color: Colors.grey[400], size: 20),
+                      onPressed: () async {
+                        final url = Uri.parse(link['url']!.replaceAll('@word', 'test'));
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        }
+                      },
+                      tooltip: '测试打开',
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit_outlined, color: Colors.grey[400]),
+                      onPressed: () => _showQuickLinkDialog(index: index, link: link),
+                      tooltip: '编辑',
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete_outline, color: Colors.grey[400]),
+                      onPressed: () => _deleteQuickLink(index),
+                      tooltip: '删除',
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        TextButton.icon(
+          icon: const Icon(Icons.add),
+          label: const Text('添加快捷链接'),
+          onPressed: () => _showQuickLinkDialog(),
+        ),
+      ],
+    );
+  }
+
+  void _showQuickLinkDialog({int? index, Map<String, String>? link}) {
+    final nameController = TextEditingController(text: link?['name'] ?? '');
+    final urlController = TextEditingController(text: link?['url'] ?? '');
+    final isEdit = index != null;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isEdit ? '编辑快捷链接' : '添加快捷链接'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: '名称', hintText: '如：百度翻译'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: urlController,
+              decoration: const InputDecoration(
+                labelText: 'URL',
+                hintText: 'https://example.com?word=@word',
+                helperText: '使用 @word 作为单词占位符',
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('取消'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (nameController.text.isEmpty || urlController.text.isEmpty) return;
+
+              final navigator = Navigator.of(ctx);
+              if (isEdit) {
+                await SettingsService.instance.updateQuickLink(index, nameController.text, urlController.text);
+              } else {
+                await SettingsService.instance.addQuickLink(nameController.text, urlController.text);
+              }
+
+              if (mounted) {
+                navigator.pop();
+                setState(() {});
+              }
+            },
+            child: const Text('保存'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _deleteQuickLink(int index) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('删除快捷链接'),
+         content: const Text('确定要删除这个快捷链接吗？'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('取消'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final navigator = Navigator.of(ctx);
+              await SettingsService.instance.deleteQuickLink(index);
+              if (mounted) {
+                navigator.pop();
+                setState(() {});
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('删除', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingRow extends StatelessWidget {
+  final String label;
+  final Widget child;
+
+  const _SettingRow({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(width: 150, child: Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant))),
+        child,
+      ],
+    );
+  }
+}
+
+class _ToggleButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _ToggleButton(this.label, this.isSelected, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant),
+        ),
+      ),
+    );
+  }
+}
+
+class _AlgorithmCard extends StatelessWidget {
+  final String name;
+  final String description;
+  final String details;
+  final bool isSelected;
+  final VoidCallback onSelect;
+  final VoidCallback onConfigure;
+
+  const _AlgorithmCard({
+    required this.name,
+    required this.description,
+    required this.details,
+    required this.isSelected,
+    required this.onSelect,
+    required this.onConfigure,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    return GestureDetector(
+      onTap: onSelect,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? colorScheme.primary : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(width: 3, height: 16, color: isSelected ? colorScheme.primary : Colors.grey),
+                const SizedBox(width: 8),
+                Text(name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: colorScheme.onSurface)),
+                const Spacer(),
+                if (isSelected)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                     child: Text('使用中', style: TextStyle(fontSize: 11, color: colorScheme.onPrimary)),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(description, style: TextStyle(fontSize: 13, color: colorScheme.onSurfaceVariant)),
+            const SizedBox(height: 8),
+            Text(details, style: TextStyle(fontSize: 12, color: colorScheme.outline)),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              icon: const Icon(Icons.settings, size: 16),
+              label: const Text('查看参数'),
+              style: TextButton.styleFrom(foregroundColor: colorScheme.primary),
+              onPressed: onConfigure,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

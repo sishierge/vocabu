@@ -1,0 +1,147 @@
+--- DATABASE SCHEMA DUMP ---
+
+Table: DataStructVersion
+SQL: CREATE TABLE "DataStructVersion" (
+  "StructKey" TEXT NOT NULL,
+  "StructVersion" integer,
+  PRIMARY KEY ("StructKey")
+)
+
+Table: BookGroup
+SQL: CREATE TABLE "BookGroup" (
+  "GroupId" text NOT NULL,
+  "GroupName" TEXT,
+  "CreateTime" TEXT,
+  "Sort" TEXT,
+  "UpdateTime" integer,
+  PRIMARY KEY ("GroupId")
+)
+
+Table: WordReviewLog
+SQL: CREATE TABLE "WordReviewLog" (
+  "ReviewId" text NOT NULL,
+  "BookId" text,
+  "WordId" text,
+  "ReviewKey" TEXT,
+  "CreateTime" TEXT,
+  "UpdateTime" integer,
+  PRIMARY KEY ("ReviewId")
+)
+
+Table: GlobalWordMaster
+SQL: CREATE TABLE "GlobalWordMaster" (
+  "Word" TEXT NOT NULL,
+  "CreateTime" TEXT,
+  "UpdateTime" integer,
+  PRIMARY KEY ("Word")
+)
+
+Table: WordItem
+SQL: CREATE TABLE "WordItem" (
+  "WordId" text NOT NULL,
+  "BookId" text,
+  "Word" TEXT,
+  "Translate" TEXT,
+  "Symbol" TEXT,
+  "LearnStatus" integer,
+  "Sort" TEXT,
+  "CreateTime" TEXT,
+  "LearnTime" TEXT,
+  "MasterTime" TEXT,
+  "ReviewCount" integer,
+  "ShowCount" integer,
+  "Collected" integer,
+  "LearnParam" TEXT,
+  "UpdateTime" integer COLLATE BINARY,
+  "NextReviewTime" TEXT,
+  "TotalReviewCount" integer,
+  "UnitId" text, ErrorCount integer, ScoreValue integer,
+  PRIMARY KEY ("WordId")
+)
+
+Table: WordUnit
+SQL: CREATE TABLE "WordUnit" (
+  "UnitId" text NOT NULL,
+  "UnitName" TEXT,
+  "BookId" text,
+  "Sort" TEXT,
+  "CreateTime" TEXT,
+  "UpdateTime" integer,
+  "UnitFlag" integer, LastViewTime Text,
+  PRIMARY KEY ("UnitId")
+)
+
+Table: WordBook
+SQL: CREATE TABLE "WordBook" (
+  "BookId" text NOT NULL,
+  "BookName" TEXT,
+  "ReviewType" TEXT,
+  "Language" TEXT,
+  "CreateTime" TEXT,
+  "UpdateTime" integer,
+  "Sort" TEXT,
+  "GroupId" text,
+  "PlanNewLearnCount" integer,
+  "NewLearnBatchCount" integer,
+  "NewLearnPriority" TEXT,
+  "ReviewPriority" TEXT,
+  "Config" TEXT,
+  "SourceId" text, PlayerName text, AllowDuplicate integer, BookType text, TotalLearnTime integer, LastLearnTime TEXT,
+  PRIMARY KEY ("BookId")
+)
+
+Table: DailyLearnInfo
+SQL: CREATE TABLE "DailyLearnInfo" (
+  "LearnDate" TEXT NOT NULL,
+  "LearnTime" integer,
+  "ContinuityDays" integer,
+  "UpdateTime" integer,
+  PRIMARY KEY ("LearnDate")
+)
+
+Table: CourseContent
+SQL: CREATE TABLE "CourseContent" (
+        "ContentId" text NOT NULL,
+        "BookId" text,
+        "UnitId" text,
+        "DataType" TEXT,
+        "Content" TEXT,
+        "Extend1" TEXT,
+        "Extend2" TEXT,
+        "CreateTime" TEXT,
+        "UpdateTime" integer,
+        PRIMARY KEY ("ContentId")
+      )
+
+Table: BookDailyLearnInfo
+SQL: CREATE TABLE "BookDailyLearnInfo" (
+            "LearnId" text(50) NOT NULL,
+            "BookId" text(50),
+            "LearnDate" TEXT(20),
+            "LearnTime" integer,
+            "LearnCount" integer,
+            "UpdateTime" integer,
+            PRIMARY KEY ("LearnId")
+          )
+
+Table: CourseSentence
+SQL: CREATE TABLE "CourseSentence" (
+                  "SentenceId" text NOT NULL,
+                  "BookId" text,
+                  "UnitId" text,
+                  "SentenceText" TEXT,
+                  "Translate" TEXT,
+                  "Symbol" TEXT,
+                  "RedefineSpell" TEXT,
+                  "Sort" TEXT,
+                  "SpellCount" integer,
+                  "ErrorCount" integer,
+                  "ScoreValue" integer,
+                  "SentenceStatus" integer,
+                  "Collected" integer,
+                  "ReviewTime" TEXT,
+                  "UpdateTime" integer,
+                  "Extend1" TEXT,
+                  "Extend2" TEXT,
+                  PRIMARY KEY ("SentenceId")
+                )

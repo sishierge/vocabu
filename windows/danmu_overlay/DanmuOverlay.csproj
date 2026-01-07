@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>DanmuOverlay</AssemblyName>
+    <RootNamespace>DanmuOverlay</RootNamespace>
+    <Version>2.0.0</Version>
+    <Company>Vocabu</Company>
+    <Product>Danmu Overlay</Product>
+    <Description>Desktop word learning danmu overlay</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>
